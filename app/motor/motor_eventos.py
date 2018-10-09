@@ -4,7 +4,7 @@
 from comum.simulador.lista_encadeada import ListaEncadeada
 
 
-class SimuladorAbstrato:
+class MotorEventos:
     def __init__(self):
         self._listaEventos = ListaEncadeada()
 
