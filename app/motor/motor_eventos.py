@@ -1,4 +1,4 @@
-from comum.simulador.lista_encadeada import ListaEncadeada
+from .lista_encadeada import ListaEncadeada
 
 
 class MotorEventos:
