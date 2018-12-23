@@ -1,6 +1,3 @@
-# Copyright (c) 2016 Gabriel Casarin da Silva, All Rights Reserved.
-
-
 class No(object):
     def __init__(self, conteudo):
         super(No, self).__init__()
