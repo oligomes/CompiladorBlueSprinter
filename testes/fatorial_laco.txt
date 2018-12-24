@@ -1,5 +1,5 @@
 def main {
-	var a, b int
+	var a , b int
 	a = 1
 	b = 6
 	while b > 0 {

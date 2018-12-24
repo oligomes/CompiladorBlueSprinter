@@ -10,6 +10,7 @@ class AnalisadorLexico(MotorEventos):
         self.__classificacoes = {}
         self.add_evento(Evento('PartidaInicial'))
 
+
     def trata_evento(self, evento):
         if evento.tipo == 'PartidaInicial':
             self.PartidaInicial()
@@ -21,20 +22,16 @@ class AnalisadorLexico(MotorEventos):
             self.CursorParaDireita()
         elif evento.tipo == 'ExecutarTransducao':
             self.ExecutarTransducao()
-        elif evento.tipo == 'InsereNaFita':
-            self.InsereNaFita(evento.informacao)
-
-
-    def InsereNaFita(self, simbolo):
-        self.__caracteres.append(simbolo)
-        self.add_evento(Evento('CursorParaDireita'))
+        elif evento.tipo == 'LeituraSimbolo':
+            self.LeituraSimbolo()
 
 
     def PartidaInicial(self):
         # poe o automato no estado inicial
         self._automato.inicializar()
         # põe os dados na "fita"
-        self.__caracteres = []
+        self.__fita = ['']
+        self.__cursor = 0
         self.token_atual = ''
         self.valor_token = 0 # Para numerais
         self.tokens = []
@@ -50,6 +47,12 @@ class AnalisadorLexico(MotorEventos):
 
 
     def ChegadaSimbolo(self, c):
+        self.__fita[self.__cursor] = c
+        self.add_evento(Evento('LeituraSimbolo'))
+
+
+    def LeituraSimbolo(self):
+        c = self.__fita[self.__cursor]
         try:
             self._automato.atualizar_simbolo(c[1])
             transitou = self._automato.fazer_transicao()
@@ -61,18 +64,14 @@ class AnalisadorLexico(MotorEventos):
             self.token_atual += c[0]
             if self._automato.saida_gerada is not None:
                 self.add_evento(Evento('ExecutarTransducao'))
-            #self.add_evento(Evento('CursorParaDireita'))
+            self.add_evento(Evento('CursorParaDireita'))
         else:
             self.add_evento(Evento('ReiniciarAutomato'))
-            self.add_evento(Evento('ChegadaSimbolo', c))
 
 
     def CursorParaDireita(self):
-        try:
-            c = self.__caracteres[-1]
-            self.add_evento(Evento('ChegadaSimbolo', c))
-        except Exception as e:
-            print(e)
+        self.__fita.append('')
+        self.__cursor += 1
 
 
     def ExecutarTransducao(self):

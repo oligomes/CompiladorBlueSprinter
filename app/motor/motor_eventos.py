@@ -15,6 +15,8 @@ class MotorEventos:
             self._listaEventos.insere(evento)
 
     def run(self):
-        while self._listaEventos:
+        evento_final = False
+        while self._listaEventos and not evento_final:
             proximo_evento = self._listaEventos.remove()
+            evento_final = proximo_evento.final
             self.trata_evento(proximo_evento)

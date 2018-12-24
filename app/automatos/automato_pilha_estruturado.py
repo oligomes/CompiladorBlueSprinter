@@ -87,6 +87,7 @@ class AutomatoPilhaEstruturado:
         # Troca de sub-máquina e a inicializa
         self.__maquinaAtual = self[proxMaquina]
         self.__maquinaAtual.inicializar()
+        print(self.__pilha)
 
     def retorna(self):
         if self.__pilha:
@@ -98,6 +99,7 @@ class AutomatoPilhaEstruturado:
                 self.__saida_gerada = None
             self.__maquinaAtual = submaqRet
             self.__maquinaAtual.inicializar(estadoRetorno)
+        print(self.__pilha)
 
     def mConfiguracao(self):
         return self.__maquinaAtual.mConfiguracao()

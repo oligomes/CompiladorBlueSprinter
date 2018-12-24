@@ -48,6 +48,13 @@ class ListaEncadeada(object):
             return noRet.conteudo
         else:
             return None
+    
+    def imprimir(self):
+        atual = self.raiz
+        while atual:
+            print(atual.conteudo)
+            atual = atual.proximo
+        print()
 
     def __len__(self):
         return self.__length

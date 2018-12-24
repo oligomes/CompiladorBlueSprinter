@@ -41,7 +41,7 @@ class Filtro(MotorEventos):
             if caractere in conjunto:
                 classificacao = categoria
         self.caracteres_classificados.append((caractere, classificacao))
-        self.tokenizer.add_evento(Evento('InsereNaFita', (caractere, classificacao)))
+        self.tokenizer.add_evento(Evento('ChegadaSimbolo', (caractere, classificacao)))
         self.tokenizer.run()
 
     def chegada_linha(self, linha, num):
