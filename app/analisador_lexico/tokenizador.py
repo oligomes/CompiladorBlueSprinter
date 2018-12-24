@@ -1,16 +1,14 @@
 import string
-from ..motor import MotorEventos
-from ..motor import Evento
+from ..motor import MotorEventos, Evento
 
 
 class AnalisadorLexico(MotorEventos):
     def __init__(self, automato, palavras_reservadas=()):
-            self.__palavras_reservadas = palavras_reservadas
-            self._automato = automato
-            self.__classificacoes = {}
-            self.add_evento(Evento('PartidaInicial'))
-            self.run()
-
+        super(AnalisadorLexico, self).__init__()
+        self.__palavras_reservadas = palavras_reservadas
+        self._automato = automato
+        self.__classificacoes = {}
+        self.add_evento(Evento('PartidaInicial'))
 
     def trata_evento(self, evento):
         if evento.tipo == 'PartidaInicial':
