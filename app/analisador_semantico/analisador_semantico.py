@@ -305,7 +305,6 @@ class AnalisadorSemantico:
         self.__func_atual.offset_valor_retorno = self.__func_atual.pilha_parametros_offset
 
     def encerra_funcao(self):
-        escopo = self.tabela_simbolos.escopo_atual
         self.tabela_simbolos.remover_escopo()
         self.codigo.append("RET_{0}\tLD  FP".format(self.__func_atual.nome))
         self.codigo.append("-   WORD_TAM")
