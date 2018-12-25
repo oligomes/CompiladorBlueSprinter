@@ -14,6 +14,7 @@ class Compilador:
         self.analisador_semantico = AnalisadorSemantico()
         self.analisador_sintatico = AnalisadorSintatico(automato_sintatico, self.analisador_semantico)
 
+
     def compilar(self, nome_arquivo):
         self.extrator.add_evento(Evento('AbrirArquivo', nome_arquivo))
         self.extrator.run()
@@ -22,6 +23,7 @@ class Compilador:
         for tok in self.extrator.filtro.tokenizer.tokens:
             self.analisador_sintatico.add_evento(Evento('ChegadaSimbolo', tok))
         self.analisador_sintatico.run()
+
 
     def exportar(self, arquivo_saida):
         with open(arquivo_saida, 'w') as f:

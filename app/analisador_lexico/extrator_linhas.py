@@ -33,7 +33,7 @@ class ExtratorLinhas(MotorEventos):
     def leitura_linha(self):
         linha = self.arquivo_fonte.readline()
         if linha:
-            self.filtro.add_evento(Evento('ChegadaLinha', (linha + '\n', self.contador_linhas)))
+            self.filtro.add_evento(Evento('ChegadaLinha', (linha, self.contador_linhas)))
             self.filtro.run()
             self.add_evento(Evento('LeituraLinha'))
             self.contador_linhas += 1

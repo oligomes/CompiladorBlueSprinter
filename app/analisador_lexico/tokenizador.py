@@ -44,12 +44,12 @@ class AnalisadorLexico(MotorEventos):
         self._automato.inicializar()
         self.token_atual = ''
         self.valor_token = 0
-        self.add_evento(Evento('LeituraSimbolo'))
+        self.add_evento(Evento('LeituraSimbolo'), no_fim=True)
 
 
     def ChegadaSimbolo(self, c):
         self.__fita[self.__cursor] = c
-        self.add_evento(Evento('LeituraSimbolo'))
+        self.add_evento(Evento('LeituraSimbolo'), no_fim=True)
 
 
     def LeituraSimbolo(self):
@@ -64,10 +64,10 @@ class AnalisadorLexico(MotorEventos):
         if transitou:
             self.token_atual += c[0]
             if self._automato.saida_gerada is not None:
-                self.add_evento(Evento('ExecutarTransducao'))
-            self.add_evento(Evento('CursorParaDireita'))
+                self.add_evento(Evento('ExecutarTransducao'), no_fim=True)
+            self.add_evento(Evento('CursorParaDireita'), no_fim=True)
         else:
-            self.add_evento(Evento('ReiniciarAutomato'))
+            self.add_evento(Evento('ReiniciarAutomato'), no_fim=True)
 
 
     def CursorParaDireita(self):
