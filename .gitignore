@@ -162,3 +162,7 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/python,visualstudiocode
+
+*.mvn
+*.run
+*.lst
