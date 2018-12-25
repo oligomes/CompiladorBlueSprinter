@@ -758,16 +758,3 @@ class AnalisadorSemantico:
             self.__pilha_tipos_resultados_parciais.pop()
             self.__pilha_tipos_resultados_parciais.append('int')
             self.__pilha_operadores.pop() # '('
-
-    def exportar_asm(self, arquivo_saida):
-        with open(arquivo_saida, 'w') as f:
-            for line in self.preambulo:
-                f.write(line + '\n')
-            f.write('; declaracao de CONSTANTES\n')
-            for line in self.constantes:
-                f.write(line + '\n')
-            f.write('; declaracao de FUNCOES\n')
-            for line in self.codigo:
-                f.write(line + '\n')
-            f.write('# FIM\n')
- 
