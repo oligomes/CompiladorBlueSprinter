@@ -8,7 +8,6 @@ class AnalisadorSintatico(MotorEventos):
         self.__gerador_codigo = gerador_codigo
 
     def trata_evento(self, evento):
-        self._listaEventos.imprimir()
         if evento.tipo == 'PartidaInicial':
             self.PartidaInicial()
         elif evento.tipo == 'CursorParaDireita':
@@ -36,13 +35,6 @@ class AnalisadorSintatico(MotorEventos):
     def ChegadaSimbolo(self, simbolo):
         self.__fita[self.__cursor] = simbolo
         self.add_evento(Evento('LeituraSimbolo'), no_fim=True)
-        # try:
-        #     tok = next(self._tokens)
-        # except Exception as e:
-        #     self.add_evento(('FimEntrada',))
-        #     if self.ap.tem_retorno_a_realizar():
-        #         self.add_evento(('CursorParaDireita', ), no_fim=True)
-        #         self.add_evento(('RetornoSubmaquina', ), no_fim=True)
 
     def CursorParaDireita(self):
         self.__fita.append('')
@@ -87,7 +79,6 @@ class AnalisadorSintatico(MotorEventos):
 
     def ExecutarTransducao(self, token):
         rotina = self.ap.saida_gerada
-        # print(token, " ", rotina)
         self.__gerador_codigo(rotina, token)
 
     def FimEntrada(self):
