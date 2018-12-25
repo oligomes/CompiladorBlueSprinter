@@ -44,6 +44,7 @@ class AnalisadorLexico(MotorEventos):
         self._automato.inicializar()
         self.token_atual = ''
         self.valor_token = 0
+        self.add_evento(Evento('LeituraSimbolo'))
 
 
     def ChegadaSimbolo(self, c):
