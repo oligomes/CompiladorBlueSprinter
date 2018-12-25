@@ -306,10 +306,6 @@ class AnalisadorSemantico:
 
     def encerra_funcao(self):
         escopo = self.tabela_simbolos.escopo_atual
-        print()
-        for s in escopo.simbolos:
-            print("{0.nome}    {0.tipo.s}    {0.especie}    {0.posicao}".format(s))
-        print('return:', self.__func_atual.offset_valor_retorno)
         self.tabela_simbolos.remover_escopo()
         self.codigo.append("RET_{0}\tLD  FP".format(self.__func_atual.nome))
         self.codigo.append("-   WORD_TAM")
@@ -375,7 +371,7 @@ class AnalisadorSemantico:
         if self.inverte[-1]:
             self.codigo.append('LD K_FFFF')
             self.codigo.append('SC PUSH')
-            self.codigo.append('SC PUSHDOWN_MUL')
+            self.codigo.append('SC    PUSHDOWN_MUL')
             self.inverte[-1] = False
         if self.__pilha_operadores:
             if (self.__pilha_operadores[-1] == '*'
@@ -388,7 +384,7 @@ class AnalisadorSemantico:
                         if operador_old == '+':
                             self.codigo.append('SC PUSHDOWN_SUM')
                         elif operador_old == '-':
-                            self.codigo.append('SC PUSHDOWN_DIF')
+                            self.codigo.append('SC    PUSHDOWN_DIF')
                         self.__pilha_tipos_resultados_parciais.pop()
         self.__pilha_operadores.append(operador)
 
@@ -396,14 +392,14 @@ class AnalisadorSemantico:
         if self.inverte[-1]:
             self.codigo.append('LD K_FFFF')
             self.codigo.append('SC PUSH')
-            self.codigo.append('SC PUSHDOWN_MUL')
+            self.codigo.append('SC    PUSHDOWN_MUL')
             self.inverte[-1] = False
         if self.__pilha_operadores:
             operador_old = self.__pilha_operadores[-1]
             if (self.__pilha_tipos_resultados_parciais[-1]
                 == self.__pilha_tipos_resultados_parciais[-2]):
                     if operador_old == '*':
-                        self.codigo.append('SC PUSHDOWN_MUL')
+                        self.codigo.append('SC    PUSHDOWN_MUL')
                         self.__pilha_operadores.pop()
                         self.__pilha_tipos_resultados_parciais.pop()
                     elif operador_old == '/':
@@ -431,7 +427,7 @@ class AnalisadorSemantico:
         if self.inverte[-1]:
             self.codigo.append('LD K_FFFF')
             self.codigo.append('SC PUSH')
-            self.codigo.append('SC PUSHDOWN_MUL')
+            self.codigo.append('SC    PUSHDOWN_MUL')
         self.inverte.pop()
         if self.__pilha_operadores:
             if (self.__pilha_operadores[-1] == '*'
@@ -439,18 +435,13 @@ class AnalisadorSemantico:
                     self.sai_termo()
             if self.__pilha_operadores and self.__pilha_operadores[-1] != '(':
                 operador_old = self.__pilha_operadores.pop()
-                print('era pra executar:', operador_old)
-                print(self.__pilha_tipos_resultados_parciais[-1])
-                print(self.__pilha_tipos_resultados_parciais[-2])
-                print(self.__pilha_tipos_resultados_parciais)
                 if (self.__pilha_tipos_resultados_parciais[-1]
                     == self.__pilha_tipos_resultados_parciais[-2]):
                         if operador_old == '+':
                             self.codigo.append('SC PUSHDOWN_SUM')
                         elif operador_old == '-':
-                            self.codigo.append('SC PUSHDOWN_DIF')
+                            self.codigo.append('SC    PUSHDOWN_DIF')
                         self.__pilha_tipos_resultados_parciais.pop()
-                        print('hi')
         # cuida das comparacoes
         if self.__pilha_operadores_booleanos:
             comp = self.__pilha_operadores_booleanos.pop()
@@ -459,13 +450,13 @@ class AnalisadorSemantico:
                     if comp == '==':
                         self.codigo.append('SC IGUAL')
                     elif comp == '>=':
-                        self.codigo.append('SC MAIOR_OU_IGUAL')
+                        self.codigo.append('SC    MAIOR_OU_IGUAL')
                     elif comp == '<=':
                         self.codigo.append('SC MENOR_OU_IGUAL')
                     elif comp == '!=':
                         self.codigo.append('SC DIFERENTE')
                     elif comp == '>':
-                        self.codigo.append('SC MAIOR')
+                        self.codigo.append('SC    MAIOR')
                     elif comp == '<':
                         self.codigo.append('SC MENOR')
                     self.__pilha_tipos_resultados_parciais.pop()
@@ -488,7 +479,7 @@ class AnalisadorSemantico:
         if (self.__pilha_tipos_resultados_parciais[-1]
             == self.__pilha_tipos_resultados_parciais[-2]):
                 if operador == '*':
-                    self.codigo.append('SC PUSHDOWN_MUL')
+                    self.codigo.append('SC    PUSHDOWN_MUL')
                 elif operador == '/':
                     self.codigo.append('SC PUSHDOWN_DIV')
                 self.__pilha_tipos_resultados_parciais.pop()
@@ -603,12 +594,12 @@ class AnalisadorSemantico:
         self.codigo.append("MM FP")
         self.codigo.append("SC {}".format(self.__pilha_identificadores[-1].nome))
         self.codigo.append("; volta ao contexto anterior")
-        self.codigo.append("SC POP ; restaura FP")
+        self.codigo.append("SC    POP ; restaura FP")
         self.codigo.append("MM FP")
-        self.codigo.append("SC POP ; restaura end. de retorno")
+        self.codigo.append("SC    POP ; restaura end. de retorno")
         self.codigo.append("MM {}".format(self.__func_atual.nome))
         for i in range(self.__contador_parametros_atribuidos[-1]):
-            self.codigo.append("SC POP")
+            self.codigo.append("SC    POP")
             self.__pilha_tipos_resultados_parciais.pop()
         self.codigo.append("; termina de desempilhar os parametros passados aa funcao")
         self.codigo.append("; resta o valor de retorno no topo da pilha")
@@ -629,7 +620,7 @@ class AnalisadorSemantico:
         if self.inverte[-1]:
             self.codigo.append('LD K_FFFF')
             self.codigo.append('SC PUSH')
-            self.codigo.append('SC PUSHDOWN_MUL')
+            self.codigo.append('SC    PUSHDOWN_MUL')
             self.inverte[-1] = False
     # FIM CHAMADA DE PROCEDIMENTOS
 
@@ -684,7 +675,7 @@ class AnalisadorSemantico:
         self.__pilha_ids_if.append(self.__contador_ifs)
         self.__contador_elifs = 0
         self.__pilha_ids_elif.append([self.__contador_elifs])
-        self.codigo.append('{}_IF_{} SC POP'.format(self.__func_atual.nome, self.__pilha_ids_if[-1]))
+        self.codigo.append('{}_IF_{} SC    POP'.format(self.__func_atual.nome, self.__pilha_ids_if[-1]))
         self.__pilha_tipos_resultados_parciais.pop()
         dummy_label = next(self.__dummy_labels_generator)
         self.__labels_a_resolver.append((dummy_label, len(self.codigo)))
@@ -695,7 +686,7 @@ class AnalisadorSemantico:
         self.__pilha_ids_elif[-1].append([self.__contador_elifs])
         dummy_label, indice = self.__labels_a_resolver.pop()
         label_elif = '{}_ELIF_{}_{}'.format(self.__func_atual.nome, self.__pilha_ids_if[-1], self.__contador_elifs)
-        self.codigo.append(label_elif + ' SC POP')
+        self.codigo.append(label_elif + ' SC    POP')
         label_real = self.codigo[indice]
         label_real = label_real.replace(' {}'.format(dummy_label), ' ' + label_elif)
         self.codigo[indice] = label_real
@@ -731,7 +722,7 @@ class AnalisadorSemantico:
         self.__pilha_ids_while.append(self.__contador_whiles)
         self.codigo.append('{}_WHILE_{} + K_0000'.format(self.__func_atual.nome, self.__pilha_ids_while[-1]))
     def constroi_while2(self):
-        self.codigo.append('SC POP')
+        self.codigo.append('SC    POP')
         self.__pilha_tipos_resultados_parciais.pop()
         self.codigo.append('JZ {}_END_WHILE_{}'.format(self.__func_atual.nome, self.__pilha_ids_while[-1]))
     def fecha_while(self):
